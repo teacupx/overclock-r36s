@@ -12,9 +12,21 @@ This is intended for advanced users. Overclocking may cause instability, crashes
 
 Kernel sources are available here: https://github.com/teacupx/linux-r36s
 
+There are three available packages:
+
+- **Normal**: recommended for most original R36S units.
+- **Extreme**: experimental version with fewer limits, intended only for testing.
+- **Clones**: build for clone units. I do not own a clone unit, so this version is untested by me.
+
+For a detailed explanation of the differences, when to use each version, and the recommended tuning procedure, read:
+
+https://github.com/teacupx/overclock-r36s/blob/master/docs/OVERCLOCK.md
+
 ### 2. Installation
 
-Copy the contents of this repository to the `BOOT` partition of your DarkOS SD card.
+Choose the package you want to use: the normal package, the `extreme` package, or the `clones` package.
+
+Copy the contents of the chosen package to the `BOOT` partition of your DarkOS SD card.
 
 The folder should contain at least:
 
@@ -113,9 +125,21 @@ Esto está pensado para usuarios avanzados. El overclock puede causar inestabili
 
 El código fuente del kernel está aquí: https://github.com/teacupx/linux-r36s
 
+Hay tres paquetes disponibles:
+
+- **Normal**: recomendado para la mayoría de R36S originales.
+- **Extreme**: versión experimental con menos límites, pensada solo para pruebas.
+- **Clones**: compilación para consolas clon. No tengo una consola clon, así que esta versión no la he podido probar personalmente.
+
+Para una explicación detallada de las diferencias, cuándo usar cada versión y el procedimiento recomendado de ajuste, lee:
+
+https://github.com/teacupx/overclock-r36s/blob/master/docs/OVERCLOCK.md
+
 ### 2. Instalación
 
-Copia el contenido de este repositorio a la partición `BOOT` de la tarjeta SD de DarkOS.
+Elige el paquete que quieras usar: el paquete normal, el paquete `extreme` o el paquete `clones`.
+
+Copia el contenido del paquete elegido a la partición `BOOT` de la tarjeta SD de DarkOS.
 
 La carpeta debe contener al menos:
 
