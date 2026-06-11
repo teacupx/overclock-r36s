@@ -1,4 +1,3 @@
-````markdown
 # R36S DarkOS overclock guide
 
 ## English
