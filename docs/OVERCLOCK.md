@@ -12,6 +12,8 @@ Use this only if you understand the risk. Keep backups. Test slowly. Do not star
 
 A cooling mod is strongly recommended, almost mandatory for serious testing above 1416 MHz.
 
+According to Rockchip, 1350 mV is the recommended maximum voltage for RK3326, and 1400 mV is the absolute maximum. Anything above that is outside the specification. I personally do not mind experimenting with my 25 EUR toy, accepting the risk that I may break it. I would never do such a thing with my laptop or phone, for example.
+
 ### 2. Available versions
 
 There are three versions.
@@ -126,7 +128,7 @@ setenv bootargs
 Add these two parameters at the end of the existing boot arguments:
 
 ```text
-max_cpufreq=XXXX cpufreq.default_governor=powersave
+max_cpufreq=XXXX boot_cpufreq=1296
 ```
 
 Replace `XXXX` with the desired maximum CPU frequency.
@@ -145,24 +147,24 @@ Available values:
 Recommended first test:
 
 ```text
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 Do not copy a whole `boot.ini` line from another device. Keep your existing line and only add the overclock parameters at the end.
 
-### 6. Why use powersave during boot?
+### 6. Why use boot_cpufreq during boot?
 
 The parameter:
 
 ```text
-cpufreq.default_governor=powersave
+boot_cpufreq=1296
 ```
 
-is not strictly required, but it helps with boot stability.
+sets a safe initial CPU frequency limit during boot.
 
-The boot process is the most delicate moment. If the system tries to jump too early to the maximum CPU frequency, it may freeze before EmulationStation starts.
+`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available in `scaling_available_frequencies`. `boot_cpufreq=1296` keeps the initial boot-time CPU frequency limit at 1296 MHz, so the system does not try to jump to an unstable overclock frequency too early.
 
-Using `powersave` as the default governor reduces that risk. Once EmulationStation starts, DarkOS applies the CPU governor selected in the user interface.
+The recommended setup is to leave `boot_cpufreq=1296` for safer booting, and then raise the CPU frequency later from userspace, for example with `r36-tuner` or your own startup script.
 
 ### 7. Recommended tuning procedure
 
@@ -209,7 +211,7 @@ If the device crashes, freezes, reboots, or shows strange behavior, go back to t
 Edit `boot.ini` and add:
 
 ```text
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 Boot the device.
@@ -240,7 +242,7 @@ Always test one step at a time.
 At each frequency:
 
 1. Edit `boot.ini`.
-2. Boot with `cpufreq.default_governor=powersave`.
+2. Boot with `boot_cpufreq=1296`.
 3. Use `r36-tuner`.
 4. Tune voltage carefully.
 5. Test stability under real load.
@@ -288,7 +290,7 @@ If the device does not boot:
 
 1. Remove the SD card.
 2. Open the `BOOT` partition on a computer.
-3. Remove the `max_cpufreq=XXXX` parameter from `boot.ini`.
+3. Remove the `max_cpufreq=XXXX` parameter from `boot.ini`. If needed, also remove `boot_cpufreq=YYYY`.
 4. Try booting again.
 
 If needed, restore the original files:
@@ -315,6 +317,8 @@ El overclock y el overvolt pueden causar inestabilidad, cuelgues, corrupción de
 Úsalo solo si entiendes el riesgo. Conserva copias de seguridad. Prueba poco a poco. No empieces directamente por la frecuencia más alta.
 
 Se recomienda encarecidamente hacer un cooling mod; para pruebas serias por encima de 1416 MHz es casi obligatorio.
+
+Según Rockchip, 1350 mV es el voltaje máximo recomendado para el RK3326, y 1400 mV es el máximo absoluto. Cualquier valor por encima de eso queda fuera de especificación. Personalmente, no me importa experimentar con mi juguete de 25 EUR, aceptando el riesgo de romperlo. No haría nunca algo así con mi portátil o mi teléfono, por ejemplo.
 
 ### 2. Versiones disponibles
 
@@ -430,7 +434,7 @@ setenv bootargs
 Añade estos dos parámetros al final de los argumentos de arranque existentes:
 
 ```text
-max_cpufreq=XXXX cpufreq.default_governor=powersave
+max_cpufreq=XXXX boot_cpufreq=1296
 ```
 
 Sustituye `XXXX` por la frecuencia máxima de CPU deseada.
@@ -449,24 +453,24 @@ Valores disponibles:
 Primera prueba recomendada:
 
 ```text
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 No copies una línea completa de `boot.ini` tomada de otro dispositivo. Conserva tu línea actual y añade solo los parámetros de overclock al final.
 
-### 6. Por qué usar powersave durante el arranque
+### 6. Por qué usar boot_cpufreq durante el arranque
 
 El parámetro:
 
 ```text
-cpufreq.default_governor=powersave
+boot_cpufreq=1296
 ```
 
-no es estrictamente imprescindible, pero ayuda a la estabilidad del arranque.
+establece un límite inicial seguro de frecuencia de CPU durante el arranque.
 
-El proceso de arranque es el momento más delicado. Si el sistema intenta saltar demasiado pronto a la frecuencia máxima de CPU, puede quedarse congelado antes de iniciar EmulationStation.
+`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible en `scaling_available_frequencies`. `boot_cpufreq=1296` mantiene el límite inicial de frecuencia durante el arranque en 1296 MHz, para que el sistema no intente saltar demasiado pronto a una frecuencia de overclock inestable.
 
-Usar `powersave` como governor por defecto reduce ese riesgo. Una vez que se inicia EmulationStation, DarkOS aplica el governor de CPU seleccionado en la interfaz de usuario.
+La configuración recomendada es dejar `boot_cpufreq=1296` para que el arranque sea más seguro, y después subir la frecuencia desde userspace, por ejemplo con `r36-tuner` o con tu propio script de arranque.
 
 ### 7. Procedimiento recomendado de ajuste
 
@@ -513,7 +517,7 @@ Si la consola se cuelga, se congela, se reinicia o muestra comportamientos extra
 Edita `boot.ini` y añade:
 
 ```text
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 Arranca la consola.
@@ -544,7 +548,7 @@ Prueba siempre de una en una.
 En cada frecuencia:
 
 1. Edita `boot.ini`.
-2. Arranca con `cpufreq.default_governor=powersave`.
+2. Arranca con `boot_cpufreq=1296`.
 3. Usa `r36-tuner`.
 4. Ajusta el voltaje con cuidado.
 5. Prueba estabilidad con carga real.
@@ -592,7 +596,7 @@ Si la consola no arranca:
 
 1. Retira la tarjeta SD.
 2. Abre la partición `BOOT` en un ordenador.
-3. Elimina el parámetro `max_cpufreq=XXXX` de `boot.ini`.
+3. Elimina el parámetro `max_cpufreq=XXXX` de `boot.ini`. Si hace falta, elimina también `boot_cpufreq=YYYY`.
 4. Prueba a arrancar de nuevo.
 
 Si hace falta, restaura los archivos originales:

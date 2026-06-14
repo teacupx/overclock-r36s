@@ -61,7 +61,7 @@ After installation, proceed to next section for config, and then safely eject th
 Edit `boot.ini` in the `BOOT` partition and add the following parameters to the kernel command line:
 
 ```
-max_cpufreq=XXXX cpufreq.default_governor=powersave
+max_cpufreq=XXXX boot_cpufreq=1296
 ```
 
 Replace `XXXX` with the desired maximum CPU frequency in MHz.
@@ -80,7 +80,7 @@ Available overclock values:
 Recommended first test:
 
 ```
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 If 1368 MHz is stable, you can try higher values step by step.
@@ -88,18 +88,20 @@ If 1368 MHz is stable, you can try higher values step by step.
 Example inside `boot.ini`:
 
 ```
-setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 cpufreq.default_governor=powersave"
+setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 boot_cpufreq=1296"
 ```
 
 Do not copy the example UUID blindly. Keep your existing `boot.ini` line and only add the two parameters at the end.
+
+`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available to the system. `boot_cpufreq=1296` keeps the initial boot-time CPU frequency limit at 1296 MHz.
+
+The recommended setup is to leave `boot_cpufreq=1296` for safer booting, and then raise the CPU frequency later from userspace, for example with `r36-tuner` or your own startup script.
 
 ### Notes
 
 If you do not add `max_cpufreq=XXXX`, the system will use the default setting, which is 1296 MHz.
 
-The `cpufreq.default_governor=powersave` parameter is not strictly required, but it helps with boot stability. The boot phase is the most critical moment, because the system may otherwise try to reach the maximum frequency too early. Once EmulationStation starts, DarkOS will apply the CPU governor selected in the user interface.
-
-For fine voltage tuning, it is recommended to use `r36-tuner`:
+For fine voltage and frequency tuning from userspace, it is recommended to use `r36-tuner`:
 
 ```
 https://github.com/zenmode-adri/r36-tuner
@@ -174,7 +176,7 @@ Cuando termine, procede al siguiente paso para configurar, y luego expulsa con s
 Edita `boot.ini` en la partición `BOOT` y añade estos parámetros a la línea de comandos del kernel:
 
 ```
-max_cpufreq=XXXX cpufreq.default_governor=powersave
+max_cpufreq=XXXX boot_cpufreq=1296
 ```
 
 Sustituye `XXXX` por la frecuencia máxima de CPU deseada, en MHz.
@@ -193,7 +195,7 @@ Valores de overclock disponibles:
 Prueba inicial recomendada:
 
 ```
-max_cpufreq=1368 cpufreq.default_governor=powersave
+max_cpufreq=1368 boot_cpufreq=1296
 ```
 
 Si 1368 MHz es estable, puedes ir probando frecuencias superiores poco a poco.
@@ -201,18 +203,20 @@ Si 1368 MHz es estable, puedes ir probando frecuencias superiores poco a poco.
 Ejemplo dentro de `boot.ini`:
 
 ```
-setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 cpufreq.default_governor=powersave"
+setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 boot_cpufreq=1296"
 ```
 
 No copies a ciegas el UUID del ejemplo. Conserva tu línea original de `boot.ini` y añade solo los dos parámetros al final.
+
+`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible para el sistema. `boot_cpufreq=1296` mantiene el límite inicial de frecuencia durante el arranque en 1296 MHz.
+
+La configuración recomendada es dejar `boot_cpufreq=1296` para que el arranque sea más seguro, y después subir la frecuencia desde userspace, por ejemplo con `r36-tuner` o con tu propio script de arranque.
 
 ### Notas
 
 Si no añades `max_cpufreq=XXXX`, el sistema usará el valor por defecto, que es 1296 MHz.
 
-El parámetro `cpufreq.default_governor=powersave` no es imprescindible, pero ayuda a la estabilidad durante el arranque. El momento del arranque es el más crítico, porque el sistema puede intentar alcanzar la frecuencia máxima demasiado pronto. Una vez que se inicia EmulationStation, DarkOS aplicará el governor de CPU elegido en la interfaz de usuario.
-
-Para hacer un ajuste fino de voltajes, se recomienda usar `r36-tuner`:
+Para hacer un ajuste fino de voltajes y frecuencias desde userspace, se recomienda usar `r36-tuner`:
 
 ```
 https://github.com/zenmode-adri/r36-tuner
