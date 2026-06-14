@@ -226,8 +226,8 @@ function Assert-Patched-Dts {
         Stop-WithMessage "La verificacion ha fallado: no se ha encontrado cpu0-opp-table."
     }
 
-    if ($cpuOpp.Node -notmatch 'rockchip,max-volt\s*=\s*<0x155cc0>;') {
-        Stop-WithMessage "La verificacion ha fallado: rockchip,max-volt de cpu0-opp-table no es 1400000 uV."
+    if ($cpuOpp.Node -notmatch 'rockchip,max-volt\s*=\s*<0x162010>;') {
+        Stop-WithMessage "La verificacion ha fallado: rockchip,max-volt de cpu0-opp-table no es 1450000 uV."
     }
 
     $dcdc = Find-NodeRange -Text $Text -NodeName "DCDC_REG2"
@@ -236,7 +236,7 @@ function Assert-Patched-Dts {
     }
 
     if ($dcdc.Node -notmatch 'regulator-max-microvolt\s*=\s*<0x162010>;') {
-        Stop-WithMessage "La verificacion ha fallado: regulator-max-microvolt de DCDC_REG2 no es 1400000 uV."
+        Stop-WithMessage "La verificacion ha fallado: regulator-max-microvolt de DCDC_REG2 no es 1450000 uV."
     }
 
     $requiredOpps = @(
@@ -323,21 +323,21 @@ Write-Host "[5/6] Parcheando el DTS..."
 
 $s = Get-Content -Raw -LiteralPath $tmpDts
 
-# cpu0-opp-table: permitir hasta 1,4 V.
+# cpu0-opp-table: permitir hasta 1,45 V.
 $s = Replace-First `
     -Text $s `
     -Pattern '(cpu0-opp-table\s*\{.*?rockchip,max-volt\s*=\s*)<[^;]+>;' `
     -Replacement '${1}<0x162010>;' `
     -Label 'cpu0-opp-table rockchip,max-volt'
 
-# Regulador de CPU vdd_arm / DCDC_REG2: permitir hasta 1,4 V.
+# Regulador de CPU vdd_arm / DCDC_REG2: permitir hasta 1,45 V.
 # Esto se hace editando directamente el nodo DCDC_REG2,
 # sin suponer ningun orden concreto de propiedades dentro de ese nodo.
 $s = Replace-Property-In-Node `
     -Text $s `
     -NodeName "DCDC_REG2" `
     -PropertyName "regulator-max-microvolt" `
-    -NewValue "<0x155cc0>" `
+    -NewValue "<0x162010>" `
     -Label "DCDC_REG2/vdd_arm regulator-max-microvolt"
 
 # OPP de CPU.
