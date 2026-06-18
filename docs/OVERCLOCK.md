@@ -125,10 +125,10 @@ Find the kernel command line, usually a line that starts with something like:
 setenv bootargs
 ```
 
-Add these two parameters at the end of the existing boot arguments:
+Add at least this parameter at the end of the existing boot arguments:
 
 ```text
-max_cpufreq=XXXX boot_cpufreq=1296
+max_cpufreq=XXXX
 ```
 
 Replace `XXXX` with the desired maximum CPU frequency.
@@ -147,24 +147,32 @@ Available values:
 Recommended first test:
 
 ```text
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
-Do not copy a whole `boot.ini` line from another device. Keep your existing line and only add the overclock parameters at the end.
+Do not copy a whole `boot.ini` line from another device. Keep your existing line and only add the overclock parameter at the end.
 
-### 6. Why use boot_cpufreq during boot?
+The kernel applies a safe 1296 MHz boot-time CPU limit by default. Advanced users can override this with `boot_cpufreq=YYYY`, or disable the boot-time limit with `boot_cpufreq=0`.
 
-The parameter:
+### 6. What boot_cpufreq does during boot
+
+`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available in `scaling_available_frequencies`.
+
+The kernel also applies a safe initial CPU frequency limit during boot. If `boot_cpufreq=YYYY` is not specified, this boot-time limit defaults to 1296 MHz. This prevents the system from trying to jump to an unstable overclock frequency too early.
+
+For normal use, you can simply omit `boot_cpufreq` and leave the default 1296 MHz boot limit. You may also set it explicitly:
 
 ```text
 boot_cpufreq=1296
 ```
 
-sets a safe initial CPU frequency limit during boot.
+Advanced users can choose another boot limit, for example `boot_cpufreq=1368`, or disable the boot-time limit entirely with:
 
-`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available in `scaling_available_frequencies`. `boot_cpufreq=1296` keeps the initial boot-time CPU frequency limit at 1296 MHz, so the system does not try to jump to an unstable overclock frequency too early.
+```text
+boot_cpufreq=0
+```
 
-The recommended setup is to leave `boot_cpufreq=1296` for safer booting, and then raise the CPU frequency later from userspace, for example with `r36-tuner` or your own startup script.
+Disabling the boot-time limit is not recommended unless you know that your selected overclock is stable very early during boot. Userspace can raise the CPU frequency later, for example with `r36-tuner` or with a startup script.
 
 ### 7. Recommended tuning procedure
 
@@ -211,7 +219,7 @@ If the device crashes, freezes, reboots, or shows strange behavior, go back to t
 Edit `boot.ini` and add:
 
 ```text
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
 Boot the device.
@@ -242,7 +250,7 @@ Always test one step at a time.
 At each frequency:
 
 1. Edit `boot.ini`.
-2. Boot with `boot_cpufreq=1296`.
+2. Boot with the default 1296 MHz boot-time limit, or set `boot_cpufreq=1296` explicitly.
 3. Use `r36-tuner`.
 4. Tune voltage carefully.
 5. Test stability under real load.
@@ -290,7 +298,7 @@ If the device does not boot:
 
 1. Remove the SD card.
 2. Open the `BOOT` partition on a computer.
-3. Remove the `max_cpufreq=XXXX` parameter from `boot.ini`. If needed, also remove `boot_cpufreq=YYYY`.
+3. Remove the `max_cpufreq=XXXX` parameter from `boot.ini`. If you changed the boot-time limit manually, also remove `boot_cpufreq=YYYY`.
 4. Try booting again.
 
 If needed, restore the original files:
@@ -431,10 +439,10 @@ Busca la línea de comandos del kernel, normalmente una línea que empieza con a
 setenv bootargs
 ```
 
-Añade estos dos parámetros al final de los argumentos de arranque existentes:
+Añade al menos este parámetro al final de los argumentos de arranque existentes:
 
 ```text
-max_cpufreq=XXXX boot_cpufreq=1296
+max_cpufreq=XXXX
 ```
 
 Sustituye `XXXX` por la frecuencia máxima de CPU deseada.
@@ -453,24 +461,32 @@ Valores disponibles:
 Primera prueba recomendada:
 
 ```text
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
-No copies una línea completa de `boot.ini` tomada de otro dispositivo. Conserva tu línea actual y añade solo los parámetros de overclock al final.
+No copies una línea completa de `boot.ini` tomada de otro dispositivo. Conserva tu línea actual y añade solo el parámetro de overclock al final.
 
-### 6. Por qué usar boot_cpufreq durante el arranque
+El kernel aplica por defecto un límite seguro de arranque de 1296 MHz. Los usuarios avanzados pueden cambiarlo con `boot_cpufreq=YYYY`, o desactivar el límite de arranque con `boot_cpufreq=0`.
 
-El parámetro:
+### 6. Qué hace boot_cpufreq durante el arranque
+
+`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible en `scaling_available_frequencies`.
+
+El kernel aplica también un límite inicial seguro de frecuencia de CPU durante el arranque. Si no se especifica `boot_cpufreq=YYYY`, este límite de arranque será por defecto de 1296 MHz. Así se evita que el sistema intente saltar demasiado pronto a una frecuencia de overclock inestable.
+
+Para uso normal, puedes simplemente omitir `boot_cpufreq` y dejar el límite de arranque por defecto de 1296 MHz. También puedes indicarlo explícitamente:
 
 ```text
 boot_cpufreq=1296
 ```
 
-establece un límite inicial seguro de frecuencia de CPU durante el arranque.
+Los usuarios avanzados pueden elegir otro límite de arranque, por ejemplo `boot_cpufreq=1368`, o desactivar completamente el límite de arranque con:
 
-`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible en `scaling_available_frequencies`. `boot_cpufreq=1296` mantiene el límite inicial de frecuencia durante el arranque en 1296 MHz, para que el sistema no intente saltar demasiado pronto a una frecuencia de overclock inestable.
+```text
+boot_cpufreq=0
+```
 
-La configuración recomendada es dejar `boot_cpufreq=1296` para que el arranque sea más seguro, y después subir la frecuencia desde userspace, por ejemplo con `r36-tuner` o con tu propio script de arranque.
+No se recomienda desactivar el límite de arranque salvo que sepas que el overclock elegido es estable desde una fase muy temprana del arranque. Userspace puede subir después la frecuencia de CPU, por ejemplo con `r36-tuner` o con un script de arranque.
 
 ### 7. Procedimiento recomendado de ajuste
 
@@ -517,7 +533,7 @@ Si la consola se cuelga, se congela, se reinicia o muestra comportamientos extra
 Edita `boot.ini` y añade:
 
 ```text
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
 Arranca la consola.
@@ -548,7 +564,7 @@ Prueba siempre de una en una.
 En cada frecuencia:
 
 1. Edita `boot.ini`.
-2. Arranca con `boot_cpufreq=1296`.
+2. Arranca con el límite de arranque por defecto de 1296 MHz, o indica `boot_cpufreq=1296` explícitamente.
 3. Usa `r36-tuner`.
 4. Ajusta el voltaje con cuidado.
 5. Prueba estabilidad con carga real.
@@ -596,7 +612,7 @@ Si la consola no arranca:
 
 1. Retira la tarjeta SD.
 2. Abre la partición `BOOT` en un ordenador.
-3. Elimina el parámetro `max_cpufreq=XXXX` de `boot.ini`. Si hace falta, elimina también `boot_cpufreq=YYYY`.
+3. Elimina el parámetro `max_cpufreq=XXXX` de `boot.ini`. Si cambiaste manualmente el límite de arranque, elimina también `boot_cpufreq=YYYY`.
 4. Prueba a arrancar de nuevo.
 
 Si hace falta, restaura los archivos originales:

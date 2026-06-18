@@ -58,10 +58,10 @@ After installation, proceed to next section for config, and then safely eject th
 
 ### 3. Usage
 
-Edit `boot.ini` in the `BOOT` partition and add the following parameters to the kernel command line:
+Edit `boot.ini` in the `BOOT` partition and add the following parameter to the kernel command line:
 
 ```
-max_cpufreq=XXXX boot_cpufreq=1296
+max_cpufreq=XXXX
 ```
 
 Replace `XXXX` with the desired maximum CPU frequency in MHz.
@@ -80,7 +80,7 @@ Available overclock values:
 Recommended first test:
 
 ```
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
 If 1368 MHz is stable, you can try higher values step by step.
@@ -88,14 +88,12 @@ If 1368 MHz is stable, you can try higher values step by step.
 Example inside `boot.ini`:
 
 ```
-setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 boot_cpufreq=1296"
+setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368"
 ```
 
-Do not copy the example UUID blindly. Keep your existing `boot.ini` line and only add the two parameters at the end.
+Do not copy the example UUID blindly. Keep your existing `boot.ini` line and only add the overclock parameter at the end.
 
-`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available to the system. `boot_cpufreq=1296` keeps the initial boot-time CPU frequency limit at 1296 MHz.
-
-The recommended setup is to leave `boot_cpufreq=1296` for safer booting, and then raise the CPU frequency later from userspace, for example with `r36-tuner` or your own startup script.
+`max_cpufreq=XXXX` unlocks the selected maximum frequency and makes it available to the system. The kernel keeps a safe 1296 MHz boot-time limit by default. For advanced use, this limit can be changed with `boot_cpufreq=YYYY`, or disabled with `boot_cpufreq=0`. See `docs/OVERCLOCK.md` for details.
 
 ### Notes
 
@@ -173,10 +171,10 @@ Cuando termine, procede al siguiente paso para configurar, y luego expulsa con s
 
 ### 3. Uso
 
-Edita `boot.ini` en la partición `BOOT` y añade estos parámetros a la línea de comandos del kernel:
+Edita `boot.ini` en la partición `BOOT` y añade este parámetro a la línea de comandos del kernel:
 
 ```
-max_cpufreq=XXXX boot_cpufreq=1296
+max_cpufreq=XXXX
 ```
 
 Sustituye `XXXX` por la frecuencia máxima de CPU deseada, en MHz.
@@ -195,7 +193,7 @@ Valores de overclock disponibles:
 Prueba inicial recomendada:
 
 ```
-max_cpufreq=1368 boot_cpufreq=1296
+max_cpufreq=1368
 ```
 
 Si 1368 MHz es estable, puedes ir probando frecuencias superiores poco a poco.
@@ -203,14 +201,12 @@ Si 1368 MHz es estable, puedes ir probando frecuencias superiores poco a poco.
 Ejemplo dentro de `boot.ini`:
 
 ```
-setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368 boot_cpufreq=1296"
+setenv bootargs "root=LABEL=ROOTFS rootwait rw fsck.repair=yes net.ifnames=0 fbcon=rotate:0 console=/dev/ttyFIQ0 quiet splash consoleblank=0 vt.global_cursor_default=0 max_cpufreq=1368"
 ```
 
-No copies a ciegas el UUID del ejemplo. Conserva tu línea original de `boot.ini` y añade solo los dos parámetros al final.
+No copies a ciegas el UUID del ejemplo. Conserva tu línea original de `boot.ini` y añade solo el parámetro de overclock al final.
 
-`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible para el sistema. `boot_cpufreq=1296` mantiene el límite inicial de frecuencia durante el arranque en 1296 MHz.
-
-La configuración recomendada es dejar `boot_cpufreq=1296` para que el arranque sea más seguro, y después subir la frecuencia desde userspace, por ejemplo con `r36-tuner` o con tu propio script de arranque.
+`max_cpufreq=XXXX` desbloquea la frecuencia máxima elegida y la deja disponible para el sistema. El kernel mantiene por defecto un límite seguro de arranque de 1296 MHz. Para uso avanzado, este límite se puede cambiar con `boot_cpufreq=YYYY`, o desactivar con `boot_cpufreq=0`. Lee `docs/OVERCLOCK.md` para más detalles.
 
 ### Notas
 
